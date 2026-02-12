@@ -1,26 +1,95 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Inter", "Helvetica Neue", "Arial", sans-serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+
+  /* Override specific colors to use our dynamic variables */
+  --color-white: var(--bg-base); 
+  --color-black: var(--fg-base);
+  
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-900: var(--neutral-900);
+  --color-neutral-950: var(--neutral-950);
+}
+
+/* 
+  THEME DEFINITIONS 
+  We swap the palette values to create the themes.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* DEFAULT (SWISS / LIGHT) */
+  --bg-base: #ffffff;
+  --fg-base: #0a0a0a;
+  
+  --neutral-50: #fafafa;
+  --neutral-100: #f5f5f5;
+  --neutral-200: #e5e5e5;
+  --neutral-300: #d4d4d4;
+  --neutral-400: #a3a3a3;
+  --neutral-500: #737373;
+  --neutral-600: #525252;
+  --neutral-700: #404040;
+  --neutral-800: #262626;
+  --neutral-900: #171717;
+  --neutral-950: #0a0a0a;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+[data-theme="noir"] {
+  /* MATTE BLACK (INVERTED) */
+  --bg-base: #0a0a0a;  /* bg-white becomes black */
+  --fg-base: #ffffff;  /* text-black becomes white */
+
+  /* Invert the scale so 'neutral-50' (light bg) becomes dark bg */
+  --neutral-50: #121212; 
+  --neutral-100: #1c1c1c;
+  --neutral-200: #2a2a2a;
+  --neutral-300: #404040;
+  --neutral-400: #525252;
+  --neutral-500: #737373;
+  --neutral-600: #a3a3a3;
+  --neutral-700: #d4d4d4;
+  --neutral-800: #e5e5e5;
+  --neutral-900: #f5f5f5;
+  --neutral-950: #ffffff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+[data-theme="oyster"] {
+  /* OYSTER (OFF-WHITE MONOTONE) */
+  --bg-base: #f0f0ee;
+  --fg-base: #2c2b29;
+
+  --neutral-50: #e8e8e6;
+  --neutral-100: #e0e0de;
+  --neutral-200: #d1d1cf;
+  --neutral-300: #b0b0ae;
+  --neutral-400: #90908e;
+  --neutral-500: #70706e;
+  --neutral-600: #50504e;
+  --neutral-700: #40403e;
+  --neutral-800: #30302e;
+  --neutral-900: #20201e;
+  --neutral-950: #10100f;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-base);
+  color: var(--color-neutral-900);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }
