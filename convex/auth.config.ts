@@ -1,7 +1,8 @@
 export default {
   providers: [
     {
-      domain: "https://renewed-lioness-64.clerk.accounts.dev", // COPY THIS FROM CLERK DASHBOARD
+      // Make sure this is NOT hardcoded. It must use the variable.
+      domain: process.env.CLERK_ISSUER_URL,
       applicationID: "convex",
     },
   ],
