@@ -3,30 +3,35 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
-// 1. Define the Styles using CVA
 const buttonVariants = cva(
-  // Base styles (Architecture style: square corners, tracking, uppercase option)
-  "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50 rounded-none",
+  // Updated with v4 syntax: ring-(--fg-muted)
+  "inline-flex items-center justify-center whitespace-nowrap text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-(--fg-muted) disabled:pointer-events-none disabled:opacity-50 rounded-none uppercase tracking-widest",
   {
     variants: {
       variant: {
+        // v4 syntax: bg-(--fg-base) etc.
         default:
-          "bg-neutral-950 text-neutral-50 hover:bg-neutral-950/90 shadow-sm",
+          "bg-(--fg-base) text-(--bg-base) hover:bg-(--fg-muted) hover:text-(--bg-base) border border-transparent",
+        
         destructive:
-          "bg-red-500 text-neutral-50 hover:bg-red-500/90",
+          "bg-red-900 text-white hover:bg-red-800 border border-red-900",
+        
         outline:
-          "border border-neutral-200 bg-white hover:bg-neutral-100 hover:text-neutral-900",
+          "border border-(--border-base) bg-transparent hover:bg-(--border-base) text-(--fg-base)",
+        
         secondary:
-          "bg-neutral-100 text-neutral-900 hover:bg-neutral-100/80",
+          "bg-(--border-base) text-(--fg-base) hover:bg-(--fg-muted) hover:text-(--bg-base)",
+        
         ghost:
-          "hover:bg-neutral-100 hover:text-neutral-900",
+          "hover:bg-(--border-base) hover:text-(--fg-base) text-(--fg-muted)",
+        
         link:
-          "text-neutral-900 underline-offset-4 hover:underline",
+          "text-(--fg-base) underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-10 px-6 py-2",
-        sm: "h-8 px-3 text-xs uppercase tracking-wider", // The "Architect" small button
-        lg: "h-12 px-8 text-base",
+        default: "h-11 px-8 py-2",
+        sm: "h-8 px-4 text-[10px]",
+        lg: "h-14 px-10 text-base",
         icon: "h-10 w-10",
       },
     },
@@ -37,14 +42,12 @@ const buttonVariants = cva(
   }
 );
 
-// 2. Define Props
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   isLoading?: boolean;
 }
 
-// 3. The Component
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, isLoading, children, ...props }, ref) => {
     return (

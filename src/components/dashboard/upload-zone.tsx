@@ -15,8 +15,7 @@ export function UploadZone() {
   const [isUploading, setIsUploading] = useState(false);
   const [teacherEmail, setTeacherEmail] = useState("");
 
-  // CONSTANTS
-  const MAX_SIZE_MB = 50; // Increased for Video support
+  const MAX_SIZE_MB = 50; 
   const ALLOWED_TYPES = [
     "image/png", 
     "image/jpeg", 
@@ -42,10 +41,7 @@ export function UploadZone() {
     
     setIsUploading(true);
     try {
-      // 1. Get secure upload URL
       const postUrl = await generateUploadUrl();
-
-      // 2. Upload file to Convex Storage
       const result = await fetch(postUrl, {
         method: "POST",
         headers: { "Content-Type": file.type },
@@ -56,22 +52,20 @@ export function UploadZone() {
 
       const { storageId } = await result.json();
       
-      // 3. Create Database Record
       const submissionId = await createSubmission({
         storageId,
         title: file.name,
         teacherEmail: teacherEmail || undefined,
-        contentType: file.type, // Important: Save mime type for Gemini
+        contentType: file.type,
       });
 
-      // 4. Trigger Gemini AI Analysis
       await gradeDesign({ 
         storageId, 
         submissionId,
         contentType: file.type 
       });
 
-      setTeacherEmail(""); // Reset email field on success
+      setTeacherEmail(""); 
       
     } catch (error) {
       console.error(error);
@@ -82,15 +76,15 @@ export function UploadZone() {
   };
 
   return (
-    <div className="grid md:grid-cols-[1fr_300px] gap-8 items-start">
+    <div className="flex flex-col gap-8 w-full">
       
       {/* 1. Upload Area */}
       <div
         className={`
-          relative border border-dashed h-64 flex flex-col items-center justify-between p-8 transition-all cursor-pointer group
+          relative border border-dashed h-64 w-full flex flex-col items-center justify-between p-6 transition-all cursor-pointer group
           ${isDragOver 
-            ? "border-neutral-950 bg-neutral-50" 
-            : "border-neutral-300 hover:border-neutral-400 bg-(--bg-base)"}
+            ? "border-(--fg-base) bg-(--bg-panel)" 
+            : "border-(--border-base) hover:border-(--fg-muted) bg-(--bg-base)"}
         `}
         onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
         onDragLeave={() => setIsDragOver(false)}
@@ -101,39 +95,37 @@ export function UploadZone() {
           if (file) handleFile(file);
         }}
       >
-        {/* Top Label */}
-        <span className="text-xs font-mono uppercase tracking-widest text-neutral-400 group-hover:text-neutral-600 transition-colors">
-            01. Input Source
+        <span className="text-[10px] font-mono uppercase tracking-widest text-(--fg-muted) group-hover:text-(--fg-base) transition-colors w-full text-left">
+            // 01. Input Source
         </span>
 
-        {/* Center Action */}
         <div className="text-center space-y-4">
-            <div className="flex items-center gap-3">
-                <Button variant="outline" isLoading={isUploading} className="pointer-events-none">
-                    Select File
+            <div className="flex flex-col items-center gap-3">
+                <Button variant="outline" isLoading={isUploading} className="pointer-events-none w-full">
+                    {isUploading ? "Uploading..." : "Select File"}
                 </Button>
-                <span className="text-sm text-neutral-400 hidden sm:inline-block">or drag & drop</span>
+                <span className="text-[10px] text-(--fg-muted) font-mono uppercase">or drag & drop</span>
             </div>
         </div>
 
-        {/* Bottom Technical Specs */}
-        <div className="w-full flex items-center justify-center gap-6 border-t border-neutral-200 pt-4 mt-2">
-            <div className="flex items-center gap-2 text-[10px] font-mono text-neutral-400 uppercase tracking-tight">
+        {/* Technical Specs Footer */}
+        <div className="w-full flex items-center justify-between border-t border-(--border-base) pt-3 mt-2">
+            <div className="flex items-center gap-2 text-[10px] font-mono text-(--fg-muted) uppercase tracking-tight">
                 <AlertCircle className="h-3 w-3" />
                 <span>Max: {MAX_SIZE_MB}MB</span>
             </div>
-            <div className="w-px h-3 bg-neutral-200" />
-            <div className="flex items-center gap-2 text-[10px] font-mono text-neutral-400 uppercase tracking-tight">
-                <FileImage className="h-3 w-3" />
-                <span>IMG</span>
-            </div>
-            <div className="flex items-center gap-2 text-[10px] font-mono text-neutral-400 uppercase tracking-tight">
-                <Film className="h-3 w-3" />
-                <span>VID</span>
+            <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1 text-[10px] font-mono text-(--fg-muted) uppercase">
+                    <FileImage className="h-3 w-3" />
+                    <span>IMG</span>
+                </div>
+                <div className="flex items-center gap-1 text-[10px] font-mono text-(--fg-muted) uppercase">
+                    <Film className="h-3 w-3" />
+                    <span>VID</span>
+                </div>
             </div>
         </div>
 
-        {/* Hidden Input */}
         <input
             type="file"
             accept={ALLOWED_TYPES.join(",")}
@@ -146,29 +138,30 @@ export function UploadZone() {
         />
       </div>
 
-      {/* 2. Settings Area (Email) */}
-      <div className="space-y-6 pt-2">
-        
-        <div className="space-y-4">
-            <label className="block text-xs font-medium uppercase tracking-wider text-neutral-500">
-                02. Routing (Optional)
+      {/* 2. Routing Area */}
+      <div className="space-y-4 border-t border-(--border-base) pt-8">
+         <div className="flex items-center justify-between">
+            <label className="text-[10px] font-mono uppercase tracking-widest text-(--fg-muted)">
+                // 02. Routing Node
             </label>
-            <div className="flex gap-2 border-b border-neutral-200 pb-2 focus-within:border-neutral-950 transition-colors">
-                <input 
-                    type="email" 
-                    placeholder="instructor@firm.com"
-                    value={teacherEmail}
-                    onChange={(e) => setTeacherEmail(e.target.value)}
-                    className="w-full bg-transparent outline-none text-sm placeholder:text-neutral-300 font-mono text-neutral-900"
-                />
-                <ArrowUpRight className="h-4 w-4 text-neutral-300" />
-            </div>
-            <p className="text-[10px] text-neutral-400 leading-relaxed max-w-xs">
-                Submissions are indexed and forwarded to the specified instructor address for internal review.
-            </p>
-        </div>
+            <span className="text-[9px] uppercase bg-(--bg-panel) text-(--fg-muted) border border-(--border-base) px-1 rounded">Optional</span>
+         </div>
 
+         <div className="flex gap-2 border-b border-(--border-base) pb-2 focus-within:border-(--fg-base) transition-colors">
+            <input 
+                type="email" 
+                placeholder="instructor@firm.com"
+                value={teacherEmail}
+                onChange={(e) => setTeacherEmail(e.target.value)}
+                className="w-full bg-transparent outline-none text-sm placeholder:text-(--fg-muted)/30 font-mono text-(--fg-base)"
+            />
+            <ArrowUpRight className="h-4 w-4 text-(--fg-muted)" />
+         </div>
+         <p className="text-[10px] text-(--fg-muted) leading-relaxed">
+            Forward analysis packet to instructor ID for review.
+         </p>
       </div>
+
     </div>
   );
 }

@@ -3,89 +3,86 @@
 @theme {
   --font-sans: "Inter", "Helvetica Neue", "Arial", sans-serif;
   --font-mono: "JetBrains Mono", "Courier New", monospace;
-
-  /* Override specific colors to use our dynamic variables */
-  --color-white: var(--bg-base); 
-  --color-black: var(--fg-base);
-  
-  --color-neutral-50: var(--neutral-50);
-  --color-neutral-100: var(--neutral-100);
-  --color-neutral-200: var(--neutral-200);
-  --color-neutral-300: var(--neutral-300);
-  --color-neutral-400: var(--neutral-400);
-  --color-neutral-500: var(--neutral-500);
-  --color-neutral-600: var(--neutral-600);
-  --color-neutral-700: var(--neutral-700);
-  --color-neutral-800: var(--neutral-800);
-  --color-neutral-900: var(--neutral-900);
-  --color-neutral-950: var(--neutral-950);
 }
 
-/* 
-  THEME DEFINITIONS 
-  We swap the palette values to create the themes.
-*/
 :root {
-  /* DEFAULT (SWISS / LIGHT) */
+  /* --- 1. SWISS (Light / Default) --- */
   --bg-base: #ffffff;
+  --bg-panel: #f4f4f5;
   --fg-base: #0a0a0a;
-  
-  --neutral-50: #fafafa;
-  --neutral-100: #f5f5f5;
-  --neutral-200: #e5e5e5;
-  --neutral-300: #d4d4d4;
-  --neutral-400: #a3a3a3;
-  --neutral-500: #737373;
-  --neutral-600: #525252;
-  --neutral-700: #404040;
-  --neutral-800: #262626;
-  --neutral-900: #171717;
-  --neutral-950: #0a0a0a;
+  --fg-muted: #737373;
+  --border-base: #e5e5e5;
+  --accent: #000000;
 }
 
 [data-theme="noir"] {
-  /* MATTE BLACK (INVERTED) */
-  --bg-base: #0a0a0a;  /* bg-white becomes black */
-  --fg-base: #ffffff;  /* text-black becomes white */
-
-  /* Invert the scale so 'neutral-50' (light bg) becomes dark bg */
-  --neutral-50: #121212; 
-  --neutral-100: #1c1c1c;
-  --neutral-200: #2a2a2a;
-  --neutral-300: #404040;
-  --neutral-400: #525252;
-  --neutral-500: #737373;
-  --neutral-600: #a3a3a3;
-  --neutral-700: #d4d4d4;
-  --neutral-800: #e5e5e5;
-  --neutral-900: #f5f5f5;
-  --neutral-950: #ffffff;
+  /* --- 2. NOIR (Matte Black) --- */
+  --bg-base: #050505;
+  --bg-panel: #0a0a0a;
+  --fg-base: #e5e5e5;
+  --fg-muted: #525252;
+  --border-base: #262626;
+  --accent: #ffffff;
 }
 
 [data-theme="oyster"] {
-  /* OYSTER (OFF-WHITE MONOTONE) */
-  --bg-base: #f0f0ee;
-  --fg-base: #2c2b29;
+  /* --- 3. OYSTER (Warm Greige) --- */
+  --bg-base: #e6e4e0;
+  --bg-panel: #dcdad7;
+  --fg-base: #3a3935;
+  --fg-muted: #8c8b85;
+  --border-base: #c5c4bf;
+  --accent: #3a3935;
+}
 
-  --neutral-50: #e8e8e6;
-  --neutral-100: #e0e0de;
-  --neutral-200: #d1d1cf;
-  --neutral-300: #b0b0ae;
-  --neutral-400: #90908e;
-  --neutral-500: #70706e;
-  --neutral-600: #50504e;
-  --neutral-700: #40403e;
-  --neutral-800: #30302e;
-  --neutral-900: #20201e;
-  --neutral-950: #10100f;
+[data-theme="terminal"] {
+  /* --- 4. TERMINAL (Retro Green) --- */
+  --bg-base: #020a02;
+  --bg-panel: #051405;
+  --fg-base: #4ade80; /* Bright Green */
+  --fg-muted: #15803d; /* Dim Green */
+  --border-base: #14532d;
+  --accent: #4ade80;
+}
+
+[data-theme="cobalt"] {
+  /* --- 5. COBALT (Deep Blueprint Blue) --- */
+  --bg-base: #020617; /* Slate 950 */
+  --bg-panel: #0f172a;
+  --fg-base: #bfdbfe; /* Blue 200 */
+  --fg-muted: #334155;
+  --border-base: #1e293b;
+  --accent: #3b82f6;
+}
+
+[data-theme="ember"] {
+  /* --- 6. EMBER (Warning Red/Orange) --- */
+  --bg-base: #0f0202;
+  --bg-panel: #1a0505;
+  --fg-base: #fdba74; /* Orange 300 */
+  --fg-muted: #7f1d1d;
+  --border-base: #450a0a;
+  --accent: #f97316;
+}
+
+[data-theme="slate"] {
+  /* --- 7. SLATE (Industrial Grey) --- */
+  --bg-base: #09090b;
+  --bg-panel: #18181b;
+  --fg-base: #a1a1aa;
+  --fg-muted: #3f3f46;
+  --border-base: #27272a;
+  --accent: #ffffff;
 }
 
 body {
   background-color: var(--bg-base);
-  color: var(--color-neutral-900);
+  color: var(--fg-base);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  /* Scanline texture blends with all themes */
+  background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%), linear-gradient(90deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.02));
+  background-size: 100% 3px, 3px 100%;
 }
 
 @layer utilities {
