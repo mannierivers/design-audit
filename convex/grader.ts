@@ -74,7 +74,7 @@ export const gradeDesign = action({
       }
 
       // 3. Construct the "Director" Prompt
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
       const rubricPrompt = `
         You are a Senior Art Director.
