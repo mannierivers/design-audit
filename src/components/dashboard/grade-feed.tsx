@@ -179,10 +179,11 @@ function AuditRow({ submission }: { submission: any }) {
         </div>
       </div>
 
-      {/* EXPANDED DETAILS */}
+      {/* EXPANDED DETAILS - UPDATED LAYOUT */}
       {isExpanded && submission.gradeData && (
         <div className="bg-(--bg-panel) p-8 border-t border-(--border-base) animate-in slide-in-from-top-2 duration-200">
-            <div className="grid lg:grid-cols-[1fr_1fr_300px] gap-12">
+            {/* CHANGED: 2 Columns instead of 3 */}
+            <div className="grid lg:grid-cols-2 gap-12">
                 
                 {/* Column 1: Scorecard & Lists */}
                 <div className="space-y-8">
@@ -210,6 +211,7 @@ function AuditRow({ submission }: { submission: any }) {
                         </div>
                     )}
 
+                    {/* Strengths */}
                     <div>
                         <h4 className="text-xs font-bold uppercase tracking-widest mb-4 text-(--fg-muted)">Strengths</h4>
                         <ul className="space-y-2">
@@ -221,6 +223,8 @@ function AuditRow({ submission }: { submission: any }) {
                             ))}
                         </ul>
                     </div>
+
+                    {/* Weaknesses */}
                     <div>
                         <h4 className="text-xs font-bold uppercase tracking-widest mb-4 text-(--fg-muted)">Weaknesses</h4>
                         <ul className="space-y-2">
@@ -234,13 +238,14 @@ function AuditRow({ submission }: { submission: any }) {
                     </div>
                 </div>
 
-                {/* Column 2: Director's Note & Citations */}
-                <div>
+                {/* Column 2: Director's Note, Citations & Action */}
+                <div className="flex flex-col">
                     <h4 className="text-xs font-bold uppercase tracking-widest mb-4 text-(--fg-muted)">Director's Note</h4>
-                    <p className="text-sm leading-7 text-(--fg-base) font-serif italic mb-6">
+                    <p className="text-sm leading-7 text-(--fg-base) font-serif italic mb-8">
                         "{submission.gradeData.actionable_feedback}"
                     </p>
                     
+                    {/* Referenced Standards */}
                     {submission.gradeData.recommendations && (
                         <div className="space-y-4 pt-6 border-t border-(--border-base)">
                              <h4 className="text-xs font-bold uppercase tracking-widest text-(--fg-muted) flex items-center gap-2">
@@ -279,19 +284,19 @@ function AuditRow({ submission }: { submission: any }) {
                              </div>
                         </div>
                     )}
-                </div>
 
-                {/* Column 3: Actions */}
-                <div className="pt-8 lg:pt-0 lg:border-l lg:border-(--border-base) lg:pl-8 flex flex-col justify-end">
-                    <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="w-full gap-2"
-                        onClick={handleDownload}
-                    >
-                        <Download className="h-3 w-3" />
-                        Download Report
-                    </Button>
+                    {/* DOWNLOAD BUTTON - Now at the bottom of Column 2 */}
+                    <div className="mt-8 pt-8 border-t border-(--border-base) md:mt-auto">
+                        <Button 
+                            variant="outline" 
+                            size="lg" // Made slightly larger for prominence
+                            className="w-full gap-2 border-(--fg-base) hover:bg-(--fg-base) hover:text-(--bg-base)"
+                            onClick={handleDownload}
+                        >
+                            <Download className="h-4 w-4" />
+                            Download Official Report
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>
