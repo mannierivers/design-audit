@@ -36,22 +36,26 @@ export function UploadZone() {
     return true;
   };
 
-  const handleFile = async (file: File) => {
+const handleFile = async (file: File) => {
     if (!file || !validateFile(file)) return;
     
     setIsUploading(true);
     try {
+      // 1. Get secure upload URL
       const postUrl = await generateUploadUrl();
+
+      // 2. Upload file to Convex Storage
       const result = await fetch(postUrl, {
         method: "POST",
         headers: { "Content-Type": file.type },
         body: file,
       });
       
-      if (!result.ok) throw new Error("Storage upload failed");
+      if (!result.ok) throw new Error(`Storage upload failed: ${result.statusText}`);
 
       const { storageId } = await result.json();
       
+      // 3. Create Database Record
       const submissionId = await createSubmission({
         storageId,
         title: file.name,
@@ -59,17 +63,22 @@ export function UploadZone() {
         contentType: file.type,
       });
 
-      await gradeDesign({ 
+      // 4. Trigger Gemini AI Analysis (BACKGROUND)
+      // We do NOT await this. We let it run on the server while we reset the UI.
+      gradeDesign({ 
         storageId, 
         submissionId,
         contentType: file.type 
       });
 
+      // 5. Success Feedback
       setTeacherEmail(""); 
+      alert("Upload Successful! Analysis is running in the background.");
       
-    } catch (error) {
-      console.error(error);
-      alert("System Error: Upload process failed.");
+    } catch (error: any) {
+      console.error("Upload Error Details:", error);
+      // Show the actual error message to help debugging
+      alert(`System Error: ${error.message || "Upload process failed."}`);
     } finally {
       setIsUploading(false);
     }
